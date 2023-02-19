@@ -11,7 +11,8 @@ video_folder="video"
 music_folder="music"
 result_folder="result"
 nb_video=10
-original_path="/Volumes/Untitled/Ecole/Programation/Html_Css/HaussMann"
+original_path=str(__file__).split("video_short.py")[0] #Se termine par un /
+print("The Path is :",original_path)
 #----------------------#
 
 
@@ -19,7 +20,14 @@ date=str(datetime.now()).split(" ")[0].split("-")
 day=int(date[2])+1
 month=int(date[1])
 year=int(date[0])
-hour=1
+hour=10
+
+try: #Evite de sortir 2 fois la meme video si elles n'ont pas toutes été utilisée
+    file=open("video.txt")
+    use_video=file.read().split("\n")
+    file.close()
+except:
+    use_video=[]
 
 def my_random(begin,end):
     nb1 = int(random.randint(0,end)**(begin%10))
@@ -50,7 +58,31 @@ print(r)
 for i in range(nb_video):
     try:
         max_time=my_random(20,55)
-        video = video_folder + "/" + random.choice(os.listdir(video_folder))
+
+        find_not_use=False
+        for i in os.listdir(video_folder):
+            if str(i)[0] != ".":
+                if i not in use_video:
+                    find_not_use=True
+        if not find_not_use:
+            use_video=[]
+        print("Use Video :",use_video)
+
+        name_v = "."
+        t=0
+        while name_v[0] == "." or name_v in use_video:
+            if t >500:
+                break
+            name_v = random.choice(os.listdir(video_folder))
+            t+=1
+        use_video.append(name_v)
+        print("Use Video :",use_video)
+
+        file=open("video.txt","w")
+        file.write("\n".join(use_video))
+        file.close()
+
+        video = video_folder + "/" + name_v
         print("\n\nVideo :",video)
         clip_original = VideoFileClip(video)
         clip_original_duration = clip_original.duration
@@ -136,7 +168,7 @@ for i in range(nb_video):
         
         print("Scheedule Upload on Youtube")
         hour+=1
-        if hour > 22:
+        if hour > 14:
             hour=1
             day+=1
         if day>28:
@@ -146,16 +178,24 @@ for i in range(nb_video):
             month=1
             year+=1
         
-        print("FILE :",f"{original_path}/{result_folder}/{name}")
-        print("POST YOUTUBE")
+        print("FILE :",f"{original_path}{result_folder}/{name}")
+        
         try:
-            selenium_post.start_youtube(f"{original_path}/{result_folder}/{name}",f"Urbex Exploration --- {name}","Exploration Urbaine #Urbex","Urbex, GrandEst, Exploration",str(day),str(month),str(year),str(hour),"01")
+            print("POST YOUTUBE")
+            selenium_post.start_youtube(f"{original_path}{result_folder}/{name}",f"Urbex Exploration --- {name}","Exploration Urbaine #Urbex","Urbex, GrandEst, Exploration",str(day),str(month),str(year),str(hour),"01")
         except:
             print("ERR : Post Youtube")
-        time_mod.sleep(25)
-        print("POST TIKTOK")
+        time_mod.sleep(35)
+        
         try:
-            selenium_post.start_tiktok(f"{original_path}/{result_folder}/{name}",f"Urbex Exploration --- {name}","#Urbex #GrandEst #Exploration")
+            print("POST TIKTOK")
+            selenium_post.start_tiktok(f"{original_path}{result_folder}/{name}",f"Urbex Exploration --- {name}","#Urbex #GrandEst #Exploration")
+        except:
+            print("ERR : Post tiktok")
+        time_mod.sleep(35)
+        print("POST INSTAGRAM")
+        try:
+            selenium_post.start_instagram(f"{original_path}{result_folder}/{name}",f"Urbex Exploration --- {name}\n#urbex #monde #abandoned #urbex #urbexfrance #abandonedplaces #urbexworld #france #lostplaces #urbanexploration #urbexpeople #urbexplaces #urbanexplorer #urban #exploration #forgotten #ruins #lost")
         except:
             print("ERR : Post tiktok")
         #video_to_youtube.upload_video(f"{result_folder}/{name}",f"Exploration --- {name}","",["France"],year,month,day,hour,1,1)

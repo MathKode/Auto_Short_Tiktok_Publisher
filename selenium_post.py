@@ -22,6 +22,8 @@ year="2023"
 hour="13"
 minute="05"
 file_path="/Volumes/Untitled/Ecole/Programation/Html_Css/HaussMann/result/clip_39.mp4"
+file_path=str(__file__).split("video_short.py")[0] + "result/clip_11.mp4"
+file_path='/Volumes/Urbex/TheLandOfNowhere/result/clip_11.mp4'
 
 def start_youtube(file_path,title,description,tags,day,month,year,hour,minute):
     if ordi=="WINDOWS":
@@ -167,9 +169,9 @@ def start_youtube(file_path,title,description,tags,day,month,year,hour,minute):
         driver.find_element(By.ID, "done-button").click()
 
         time.sleep(10)
-        driver.close()
+        driver.quit()
     except:
-        driver.close()
+        driver.quit()
 
 
 def start_tiktok(file_path,title,tags):
@@ -230,8 +232,102 @@ def start_tiktok(file_path,title,tags):
         bt.click()
 
         time.sleep(60)
-        driver.close()
+        driver.quit()
     except:
-        driver.close()
+        driver.quit()
+
+def start_instagram(file_path,name):
+    if ordi=="WINDOWS":
+        driver = webdriver.Chrome(executable_path="chromedriver.exe",  user_data_dir = "C:\\Users\\Elève\\AppData\\Local\\Google\\Chrome\\User Data")
+    else:
+        options = webdriver.ChromeOptions()
+        options.add_argument("user-data-dir=/Users/mathis_kremer/Library/Application Support/Google/Chrome/")
+        driver = webdriver.Chrome(options=options, executable_path=r"chromedriver")
+    
+    def loading(driver, xpath):
+        t=0
+        find=False
+        while not find:
+            try:
+                el = driver.find_element(By.XPATH, str(xpath))
+                find=True
+            except:
+                time.sleep(0.3)
+                t+=1
+            if t>20:
+                find=True
+        
+        
+    try:
+        time.sleep(2)
+        driver.get("https://www.instagram.com/")
+
+        try:
+            loading(driver, "//*[@id=÷\"mount_0_0_y3\"]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[3]/div/div[3]/div[1]/div[1]")
+            cookie = driver.find_element(By.XPATH, '//*[@id="mount_0_0_y3"]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[3]/div/div[3]/div[1]/div[1]')
+            cookie.click()
+        except:
+            print("No Cookie")
+
+
+        #UPLOAD
+        time.sleep(5)
+        loading(driver, "/html/body/div[2]/div/div/div/div[1]/div/div/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[7]/div/div/a/div")
+        up_bt = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/div[1]/div/div/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[7]/div/div/a/div")
+        up_bt.click()
+        
+        #CHOOSE FILE
+        time.sleep(5)
+        ImageLoad = driver.find_elements_by_css_selector("input[type='file']")[1]
+        ImageLoad.send_keys(file_path)
+        
+        #NEXT BUTTON
+        time.sleep(13)
+        #loading(driver, "/html/body/div[2]/div/div/div/div[2]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div/div[4]/button")
+        #bt_re = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/div[2]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div/div[4]/button")
+        #bt_re.click()
+
+        #FORMAT BUTTON
+        time.sleep(2)
+        loading(driver, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[2]/div[1]/div/div/div/div[1]/div/div[2]/div/button")
+        format_bt = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[2]/div[1]/div/div/div/div[1]/div/div[2]/div/button")
+        format_bt.click()
+
+        #SEIZE NEUVIEME FORMAT
+        time.sleep(2)
+        loading(driver, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[2]/div[1]/div/div/div/div[1]/div/div[1]/div/button[3]")
+        seize_neuf = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[2]/div[1]/div/div/div/div[1]/div/div[1]/div/button[3]")
+        seize_neuf.click()
+
+        #NEXT BUTTON
+        time.sleep(2)
+        loading(driver, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[1]/div/div/div[3]/div/button")
+        next_ = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[1]/div/div/div[3]/div/button")
+        next_.click()
+
+        #NEXT BUTTON
+        time.sleep(4)
+        loading(driver, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[1]/div/div/div[3]/div/button")
+        next_ = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[1]/div/div/div[3]/div/button")
+        next_.click()
+
+        #DESCRIPTION TITRE
+        time.sleep(4)
+        loading(driver, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[2]/div[2]/div/div/div/div[2]/div[1]/textarea")
+        legend = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[2]/div[2]/div/div/div/div[2]/div[1]/textarea")
+        legend.send_keys(f"{name}")
+
+        #POST (NEXT)
+        time.sleep(4)
+        loading(driver, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[1]/div/div/div[3]/div/button")
+        next_ = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/div/div/div[1]/div/div/div[3]/div/button")
+        next_.click()
+
+        time.sleep(75)
+        driver.quit()
+    except Exception as e:
+        print(e)
+        driver.quit()
 
 #start_tiktok(file_path,"Urbex Exploration","#Urbex")
+#start_instagram(file_path,"Urbex")
